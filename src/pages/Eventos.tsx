@@ -1,14 +1,21 @@
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Col, PageHeader, Space, Table } from "antd";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  FundTwoTone,
+  PlusOutlined,
+} from "@ant-design/icons";
+import { Button, Col, PageHeader, Space, Table, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Evento from "../components/Drawer/Evento";
 import { useAuth } from "../hooks/useAuth";
+import useRouter from "../hooks/useRoute";
 import dayjs from "../services/dayjs";
 
 function Eventos() {
   const { socket } = useAuth();
   const methods = useForm();
+  const { navigate } = useRouter();
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [open, setOpen] = useState(false);
 
@@ -86,6 +93,13 @@ function Eventos() {
                   setOpen(true);
                 }}
               />
+              <Tooltip title="Presenças">
+                <Button
+                  icon={<FundTwoTone />}
+                  type="text"
+                  onClick={() => navigate(`${evento.id}`)}
+                />
+              </Tooltip>
               <Button
                 icon={<DeleteOutlined />}
                 type="text"

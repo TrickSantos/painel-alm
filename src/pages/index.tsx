@@ -6,6 +6,7 @@ import Clubes from "./Clubes";
 import Eventos from "./Eventos";
 import Home from "./Home";
 import Membros from "./Membros";
+import Presencas from "./Presencas";
 
 function Pages() {
   const { usuario } = useAuth();
@@ -18,7 +19,10 @@ function Pages() {
           <Route index element={<Clubes />} />
           <Route path=":id" element={<Membros />} />
         </Route>
-        <Route path="evento" element={<Eventos />} />
+        <Route path="evento">
+          <Route index element={<Eventos />} />
+          <Route path=":id" element={<Presencas />} />
+        </Route>
       </Route>
     </Routes>
   );

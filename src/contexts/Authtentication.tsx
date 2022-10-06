@@ -85,7 +85,7 @@ function AuthtenticationProvider({ children }: Props) {
       "login",
       {
         email: "patrick.tafa@gmail.com",
-        password: "senha1",
+        password: "trick123",
       },
       (res: any) => {
         localStorage.setItem(STORAGE_USER, JSON.stringify(res.usuario));
