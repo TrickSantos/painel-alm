@@ -19,6 +19,7 @@ interface AuthenticatationData {
   setUsuario: Dispatch<SetStateAction<Usuario | null>>;
   login: () => void;
   socket: Socket;
+  signed: boolean;
 }
 
 const TOKEN_API = "TOKEN_API";
@@ -101,6 +102,7 @@ function AuthtenticationProvider({ children }: Props) {
   return (
     <AuthenticationContext.Provider
       value={{
+        signed: !!usuario,
         usuario,
         setUsuario,
         login,
