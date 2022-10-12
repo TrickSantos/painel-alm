@@ -36,7 +36,7 @@ function AuthtenticationProvider({ children }: Props) {
     storageUser ? JSON.parse(storageUser) : null
   );
   const [token, setToken] = useState(storageToken);
-  const socket = io("ws://localhost:3333", {
+  const socket = io(import.meta.env.VITE_WSS_URL, {
     autoConnect: false,
     auth: { token },
     extraHeaders: {
