@@ -34,7 +34,6 @@ export default function Presencas({}: Props) {
             (clube._count.presentes / clube._count.membros) * 100
           ),
         }));
-        console.log(a);
         setPresencas(a.sort((a, b) => a.porcentagem - b.porcentagem));
       }
     );
@@ -49,7 +48,6 @@ export default function Presencas({}: Props) {
               (clube._count.presentes / clube._count.membros) * 100
             ),
           }));
-          console.log(a);
           setPresencas(a.sort((a, b) => a.porcentagem - b.porcentagem));
         }
       );
@@ -72,6 +70,35 @@ export default function Presencas({}: Props) {
       theme={{
         fontSize: 20,
       }}
+      labelSkipWidth={400}
+      layers={[
+        "grid",
+        "axes",
+        "bars",
+        "markers",
+        "legends",
+        "annotations",
+        ({ bars, labelSkipWidth }) => (
+          <g>
+            {bars.map(({ width, height, y, data: { data } }) => {
+              // only show this custom outer label on bars that are too small
+              return width < labelSkipWidth ? (
+                <text
+                  transform={`translate(${width + 10}, ${y + height / 2})`}
+                  text-anchor="left"
+                  dominant-baseline="central"
+                  style={{
+                    fontFamily: "sans-serif",
+                    fontSize: 20,
+                    fill: "rgb(154, 136, 84)",
+                    pointerEvents: "none",
+                  }}
+                >{`${data.nome}: ${data.porcentagem | 0}%`}</text>
+              ) : null;
+            })}
+          </g>
+        ),
+      ]}
     />
   );
 }
