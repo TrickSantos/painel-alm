@@ -28,4 +28,13 @@ const Label = styled.label`
   font-weight: 600;
 `;
 
-export default { Container, LoginForm, LoginCard, Label };
+const PopImage = styled.div`
+  height: 100%;
+  width: auto;
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export default { Container, LoginForm, LoginCard, Label, PopImage };

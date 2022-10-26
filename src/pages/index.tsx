@@ -6,6 +6,7 @@ import Clubes from "./Clubes";
 import Eventos from "./Eventos";
 import Home from "./Home";
 import Membros from "./Membros";
+import PopClube from "./PopClube";
 import Presencas from "./Presencas";
 import PrivateRoute from "./PrivateRoute";
 
@@ -15,6 +16,7 @@ function Pages() {
   return (
     <Routes>
       <Route path="/login" element={<Home />} />
+      <Route path="/pop" element={<PopClube />} />
       <Route
         path="/"
         element={<PrivateRoute element={<Dashboard usuario={usuario} />} />}

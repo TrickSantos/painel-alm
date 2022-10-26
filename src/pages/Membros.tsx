@@ -1,5 +1,19 @@
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Col, PageHeader, Space, Table } from "antd";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  PlusOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
+import {
+  Button,
+  Col,
+  Input,
+  PageHeader,
+  Popconfirm,
+  Space,
+  Table,
+  Tooltip,
+} from "antd";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -12,8 +26,13 @@ function Membros() {
   const { socket } = useAuth();
   const methods = useForm();
   const [loading, setLoading] = useState(false);
-  const [membro, setMembros] = useState<Usuario[]>([]);
+  const [membros, setMembros] = useState<Usuario[]>([]);
+  const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
+  const filteredList =
+    search.length > 0
+      ? membros.filter((membro) => membro.nome.includes(search.toUpperCase()))
+      : membros;
 
   useEffect(() => {
     setLoading(true);
@@ -70,7 +89,7 @@ function Membros() {
     <Col span={24}>
       <PageHeader
         title="Membros"
-        subTitle={`${membro.length} Membros cadastrados`}
+        subTitle={`${filteredList.length} Membros cadastrados`}
         extra={[
           <Button
             key="new"
@@ -85,7 +104,16 @@ function Membros() {
           </Button>,
         ]}
       />
-      <Table dataSource={membro} rowKey={(row) => row.id} loading={loading}>
+      <Input.Search
+        style={{ marginBottom: "1rem" }}
+        onChange={({ target: { value } }) => setSearch(value)}
+        placeholder="Pesquisar..."
+      />
+      <Table
+        dataSource={filteredList}
+        rowKey={(row) => row.id}
+        loading={loading}
+      >
         <Table.Column<Usuario> title="Nome" dataIndex="nome" key="nome" />
         <Table.Column<Usuario>
           title="Aniversário"
@@ -101,21 +129,25 @@ function Membros() {
         />
         <Table.Column<Usuario>
           key="actions"
-          render={(_, clube) => (
+          render={(_, usuario) => (
             <Space>
-              <Button
-                icon={<EditOutlined />}
-                type="text"
-                onClick={() => {
-                  methods.reset({ ...clube });
-                  setOpen(true);
-                }}
-              />
-              <Button
-                icon={<DeleteOutlined />}
-                type="text"
-                onClick={() => handleDelete(clube.id)}
-              />
+              <Tooltip title="Editar">
+                <Button
+                  icon={<EditOutlined />}
+                  type="text"
+                  onClick={() => {
+                    methods.reset({ ...usuario });
+                    setOpen(true);
+                  }}
+                />
+              </Tooltip>
+              <Popconfirm
+                title="Deseja realmente excluir?"
+                icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+                onConfirm={() => handleDelete(usuario.id)}
+              >
+                <Button icon={<DeleteOutlined />} type="text" />
+              </Popconfirm>
             </Space>
           )}
         />

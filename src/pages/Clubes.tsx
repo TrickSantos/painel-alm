@@ -2,22 +2,39 @@ import {
   DeleteOutlined,
   EditOutlined,
   PlusOutlined,
+  QuestionCircleOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
-import { Button, Col, PageHeader, Space, Table, Tooltip } from "antd";
+import {
+  Avatar,
+  Button,
+  Col,
+  Input,
+  PageHeader,
+  Popconfirm,
+  Space,
+  Table,
+  Tooltip,
+} from "antd";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Clube from "../components/Drawer/Clube";
 import { useAuth } from "../hooks/useAuth";
 import useRouter from "../hooks/useRoute";
+import { MINIO_URL } from "../util/constants";
 
 function Clubes() {
   const { socket } = useAuth();
   const { navigate } = useRouter();
   const methods = useForm();
   const [clubes, setClubes] = useState<Clube[]>([]);
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const filteredList =
+    search.length > 0
+      ? clubes.filter((clube) => clube.nome.includes(search.toUpperCase()))
+      : clubes;
 
   useEffect(() => {
     setLoading(true);
@@ -85,9 +102,32 @@ function Clubes() {
           </Button>,
         ]}
       />
-      <Table dataSource={clubes} rowKey={(row) => row.id} loading={loading}>
-        <Table.Column<Clube> title="Nome" dataIndex="nome" key="nome" />
-        <Table.Column<Clube> title="Cidade" dataIndex="cidade" key="cidade" />
+      <Input.Search
+        style={{ marginBottom: "1rem" }}
+        onChange={({ target: { value } }) => setSearch(value)}
+        placeholder="Pesquisar..."
+      />
+      <Table
+        dataSource={filteredList}
+        rowKey={(row) => row.id}
+        pagination={{ pageSize: 7 }}
+        loading={loading}
+      >
+        <Table.Column<Clube>
+          title="Nome"
+          dataIndex="nome"
+          key="nome"
+          render={(_, data) => (
+            <Space>
+              {data.logo && (
+                <Avatar size={64} src={`${MINIO_URL}${data.logo}`} />
+              )}
+              {data.nome}
+            </Space>
+          )}
+        />
+        <Table.Column<Clube> title="País" dataIndex="pais" key="pais" />
+        <Table.Column<Clube> title="Cidade" dataIndex="regiao" key="regiao" />
         <Table.Column<Clube>
           key="actions"
           render={(_, clube) => (
@@ -109,11 +149,13 @@ function Clubes() {
                   }}
                 />
               </Tooltip>
-              <Button
-                icon={<DeleteOutlined />}
-                type="text"
-                onClick={() => handleDelete(clube.id)}
-              />
+              <Popconfirm
+                title="Deseja realmente excluir?"
+                icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+                onConfirm={() => handleDelete(clube.id)}
+              >
+                <Button icon={<DeleteOutlined />} type="text" />
+              </Popconfirm>
             </Space>
           )}
         />

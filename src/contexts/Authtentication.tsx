@@ -17,7 +17,7 @@ type Props = {
 interface AuthenticatationData {
   usuario: Usuario | null;
   setUsuario: Dispatch<SetStateAction<Usuario | null>>;
-  login: () => void;
+  login: (email: string, password: string) => Promise<void>;
   socket: Socket;
   signed: boolean;
 }
@@ -81,12 +81,12 @@ function AuthtenticationProvider({ children }: Props) {
     }
   }, [socket, token]);
 
-  const login = () => {
+  const login = async (email: string, password: string) => {
     socket.emit(
       "login",
       {
-        email: "patrick.tafa@gmail.com",
-        password: "trick123",
+        email,
+        password,
       },
       (res: any) => {
         localStorage.setItem(STORAGE_USER, JSON.stringify(res.usuario));

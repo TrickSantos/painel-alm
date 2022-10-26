@@ -2,6 +2,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_WSS_URL: string;
+  readonly VITE_MINIO_URL: string;
   // more env variables...
 }
 

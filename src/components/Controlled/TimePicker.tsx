@@ -42,7 +42,7 @@ function TimePicker(
         style={{ width: "100%" }}
         format="HH:mm"
         size="large"
-        minuteStep={10}
+        minuteStep={5}
       />
       {error && <Text type="danger">{error.message}</Text>}
     </>

@@ -2,11 +2,13 @@ import {
   DeleteOutlined,
   EditOutlined,
   FundTwoTone,
+  GlobalOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
 import { Button, Col, PageHeader, Space, Table, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import Evento from "../components/Drawer/Evento";
 import { useAuth } from "../hooks/useAuth";
 import useRouter from "../hooks/useRoute";
@@ -18,19 +20,33 @@ function Eventos() {
   const { navigate } = useRouter();
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    socket.emit("evento:index", (res: Evento[]) => setEventos(res));
+    setLoading(true);
+    socket.emit("evento:index", (res: Evento[]) => {
+      setEventos(res);
+      setLoading(false);
+    });
     socket.on("evento:created", () => {
       setOpen(false);
-      socket.emit("evento:index", (res: Evento[]) => setEventos(res));
+      socket.emit("evento:index", (res: Evento[]) => {
+        setEventos(res);
+        setLoading(false);
+      });
     });
     socket.on("evento:destroyed", () =>
-      socket.emit("evento:index", (res: Evento[]) => setEventos(res))
+      socket.emit("evento:index", (res: Evento[]) => {
+        setEventos(res);
+        setLoading(false);
+      })
     );
     socket.on("evento:updated", () => {
       setOpen(false);
-      socket.emit("evento:index", (res: Evento[]) => setEventos(res));
+      socket.emit("evento:index", (res: Evento[]) => {
+        setEventos(res);
+        setLoading(false);
+      });
     });
   }, []);
 
@@ -57,7 +73,7 @@ function Eventos() {
           </Button>,
         ]}
       />
-      <Table dataSource={eventos} rowKey={(row) => row.id}>
+      <Table dataSource={eventos} loading={loading} rowKey={(row) => row.id}>
         <Table.Column<Evento> title="Nome" dataIndex="nome" key="nome" />
         <Table.Column<Evento>
           title="Descrição"
@@ -99,6 +115,11 @@ function Eventos() {
                   type="text"
                   onClick={() => navigate(`${evento.id}`)}
                 />
+              </Tooltip>
+              <Tooltip title="Ganhador">
+                <Link to="/pop" target="_blank" rel="noreferrer">
+                  <Button icon={<GlobalOutlined />} type="text" />
+                </Link>
               </Tooltip>
               <Button
                 icon={<DeleteOutlined />}
