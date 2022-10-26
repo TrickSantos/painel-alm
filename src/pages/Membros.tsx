@@ -22,7 +22,7 @@ import useRouter from "../hooks/useRoute";
 
 function Membros() {
   const { params } = useRouter();
-  const { socket } = useAuth();
+  const { socket, usuario } = useAuth();
   const methods = useForm();
   const [loading, setLoading] = useState(false);
   const [membros, setMembros] = useState<Usuario[]>([]);
@@ -113,6 +113,7 @@ function Membros() {
         rowKey={(row) => row.id}
         loading={loading}
       >
+        <Table.Column<Usuario> title="Codigo" dataIndex="codigo" key="codigo" />
         <Table.Column<Usuario> title="Nome" dataIndex="nome" key="nome" />
         <Table.Column<Usuario>
           title="Presenças"
@@ -122,25 +123,27 @@ function Membros() {
         />
         <Table.Column<Usuario>
           key="actions"
-          render={(_, usuario) => (
+          render={(_, membro) => (
             <Space>
               <Tooltip title="Editar">
                 <Button
                   icon={<EditOutlined />}
                   type="text"
                   onClick={() => {
-                    methods.reset({ ...usuario });
+                    methods.reset({ ...membro });
                     setOpen(true);
                   }}
                 />
               </Tooltip>
-              <Popconfirm
-                title="Deseja realmente excluir?"
-                icon={<QuestionCircleOutlined style={{ color: "red" }} />}
-                onConfirm={() => handleDelete(usuario.id)}
-              >
-                <Button icon={<DeleteOutlined />} type="text" />
-              </Popconfirm>
+              {usuario?.funcao === "administrador" && (
+                <Popconfirm
+                  title="Deseja realmente excluir?"
+                  icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+                  onConfirm={() => handleDelete(membro.id)}
+                >
+                  <Button icon={<DeleteOutlined />} type="text" />
+                </Popconfirm>
+              )}
             </Space>
           )}
         />

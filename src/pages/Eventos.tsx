@@ -15,7 +15,7 @@ import useRouter from "../hooks/useRoute";
 import dayjs from "../services/dayjs";
 
 function Eventos() {
-  const { socket } = useAuth();
+  const { socket, usuario } = useAuth();
   const methods = useForm();
   const { navigate } = useRouter();
   const [eventos, setEventos] = useState<Evento[]>([]);
@@ -121,11 +121,13 @@ function Eventos() {
                   <Button icon={<GlobalOutlined />} type="text" />
                 </Link>
               </Tooltip>
-              <Button
-                icon={<DeleteOutlined />}
-                type="text"
-                onClick={() => handleDelete(evento.id)}
-              />
+              {usuario?.funcao === "administrador" && (
+                <Button
+                  icon={<DeleteOutlined />}
+                  type="text"
+                  onClick={() => handleDelete(evento.id)}
+                />
+              )}
             </Space>
           )}
         />

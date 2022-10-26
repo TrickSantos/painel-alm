@@ -24,7 +24,7 @@ import useRouter from "../hooks/useRoute";
 import { MINIO_URL } from "../util/constants";
 
 function Clubes() {
-  const { socket } = useAuth();
+  const { socket, usuario } = useAuth();
   const { navigate } = useRouter();
   const methods = useForm();
   const [clubes, setClubes] = useState<Clube[]>([]);
@@ -149,13 +149,15 @@ function Clubes() {
                   }}
                 />
               </Tooltip>
-              <Popconfirm
-                title="Deseja realmente excluir?"
-                icon={<QuestionCircleOutlined style={{ color: "red" }} />}
-                onConfirm={() => handleDelete(clube.id)}
-              >
-                <Button icon={<DeleteOutlined />} type="text" />
-              </Popconfirm>
+              {usuario?.funcao === "administrador" && (
+                <Popconfirm
+                  title="Deseja realmente excluir?"
+                  icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+                  onConfirm={() => handleDelete(clube.id)}
+                >
+                  <Button icon={<DeleteOutlined />} type="text" />
+                </Popconfirm>
+              )}
             </Space>
           )}
         />
