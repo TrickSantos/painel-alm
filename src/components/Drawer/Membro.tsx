@@ -12,7 +12,6 @@ import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useAuth } from "../../hooks/useAuth";
 import useRouter from "../../hooks/useRoute";
-import DatePicker from "../Controlled/DatePicker";
 import Input from "../Controlled/Input";
 import Select from "../Controlled/Select";
 
@@ -20,7 +19,7 @@ const { Title } = Typography;
 
 function Membro(props: DrawerProps) {
   const { socket } = useAuth();
-  const { state, params } = useRouter();
+  const { params } = useRouter();
   const [loading, setLoading] = useState(false);
   const { control, handleSubmit, reset, watch } = useFormContext();
   const membroId = watch("id");
@@ -109,14 +108,6 @@ function Membro(props: DrawerProps) {
               </Col>
             </>
           )}
-          <Col span={24}>
-            <Title level={5}>Aniversário:</Title>
-            <DatePicker
-              control={control}
-              name="aniversario"
-              rules={{ required: "A data de nascimento precisa ser informada" }}
-            />
-          </Col>
           <Col span={12}>
             <Button block type="primary" onClick={onSubmit}>
               Salvar

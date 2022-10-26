@@ -14,7 +14,6 @@ import {
   Table,
   Tooltip,
 } from "antd";
-import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Membro from "../components/Drawer/Membro";
@@ -115,12 +114,6 @@ function Membros() {
         loading={loading}
       >
         <Table.Column<Usuario> title="Nome" dataIndex="nome" key="nome" />
-        <Table.Column<Usuario>
-          title="Aniversário"
-          dataIndex="aniversario"
-          key="aniversario"
-          render={(fim) => dayjs(fim).format("DD/MM/YYYY")}
-        />
         <Table.Column<Usuario>
           title="Presenças"
           dataIndex="presecas"
