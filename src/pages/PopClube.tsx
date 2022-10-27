@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { MINIO_URL, SECONDS } from "../util/constants";
 import S from "./styles";
+import aventuri from "../assets/aventuri.png";
 
 function PopClube() {
   const { socket } = useAuth();
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const [ganhador, setGanhador] = useState<Clube | null>(null);
 
   const transition = useTransition(isVisible, {
@@ -27,25 +28,38 @@ function PopClube() {
   return (
     <S.Container>
       <S.PopImage>
-        {transition((style, item) =>
-          item ? (
-            <>
-              {ganhador && ganhador.logo && (
-                <animated.img
-                  style={{
-                    ...style,
-                    objectFit: "contain",
-                    height: "auto",
-                    width: "90%",
-                  }}
-                  src={`${MINIO_URL}${ganhador?.logo}`}
-                />
-              )}
-              <animated.div style={style}>
-                <Typography.Title level={2}>{ganhador?.nome}</Typography.Title>
-              </animated.div>
-            </>
-          ) : null
+        {isVisible ? (
+          transition((style, item) =>
+            item ? (
+              <>
+                {ganhador && ganhador.logo && (
+                  <animated.img
+                    style={{
+                      ...style,
+                      objectFit: "contain",
+                      height: "auto",
+                      width: "90%",
+                    }}
+                    src={`${MINIO_URL}${ganhador?.logo}`}
+                  />
+                )}
+                <animated.div style={style}>
+                  <Typography.Title level={2}>
+                    {ganhador?.nome}
+                  </Typography.Title>
+                </animated.div>
+              </>
+            ) : null
+          )
+        ) : (
+          <img
+            style={{
+              objectFit: "contain",
+              height: "100%",
+              width: "100%",
+            }}
+            src={aventuri}
+          />
         )}
       </S.PopImage>
     </S.Container>

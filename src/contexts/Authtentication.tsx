@@ -18,6 +18,7 @@ interface AuthenticatationData {
   usuario: Usuario | null;
   setUsuario: Dispatch<SetStateAction<Usuario | null>>;
   login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
   socket: Socket;
   signed: boolean;
 }
@@ -99,6 +100,13 @@ function AuthtenticationProvider({ children }: Props) {
     );
   };
 
+  const logout = async () => {
+    localStorage.clear();
+    setToken(null);
+    setUsuario(null);
+    navigate("/login");
+  };
+
   return (
     <AuthenticationContext.Provider
       value={{
@@ -106,6 +114,7 @@ function AuthtenticationProvider({ children }: Props) {
         usuario,
         setUsuario,
         login,
+        logout,
         socket,
       }}
     >

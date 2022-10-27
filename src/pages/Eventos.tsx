@@ -11,13 +11,11 @@ import { FormProvider, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import Evento from "../components/Drawer/Evento";
 import { useAuth } from "../hooks/useAuth";
-import useRouter from "../hooks/useRoute";
 import dayjs from "../services/dayjs";
 
 function Eventos() {
   const { socket, usuario } = useAuth();
   const methods = useForm();
-  const { navigate } = useRouter();
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -110,11 +108,13 @@ function Eventos() {
                 }}
               />
               <Tooltip title="Presenças">
-                <Button
-                  icon={<FundTwoTone />}
-                  type="text"
-                  onClick={() => navigate(`${evento.id}`)}
-                />
+                <Link
+                  to={`/telao/${evento.id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Button icon={<FundTwoTone />} type="text" />
+                </Link>
               </Tooltip>
               <Tooltip title="Ganhador">
                 <Link to="/pop" target="_blank" rel="noreferrer">

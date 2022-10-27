@@ -19,6 +19,7 @@ function Home() {
           <S.Label>Email:</S.Label>
           <Input
             size="large"
+            type="email"
             onChange={({ target: { value } }) => setEmail(value)}
             value={email}
           />

@@ -1,5 +1,6 @@
-import { Layout, Menu } from "antd";
+import { Button, Layout, Menu } from "antd";
 import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 import useRouter from "../hooks/useRoute";
 
 const { Header, Content, Sider } = Layout;
@@ -9,6 +10,7 @@ type Props = {
 };
 function Dashboard({ usuario, redirectPath = "/login" }: Props) {
   const { navigate } = useRouter();
+  const { logout } = useAuth();
 
   if (!usuario) {
     return <Navigate to={redirectPath} replace />;
@@ -16,8 +18,14 @@ function Dashboard({ usuario, redirectPath = "/login" }: Props) {
 
   return (
     <Layout style={{ height: "100vh" }}>
-      <Header>
-        <p>Logo</p>
+      <Header
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+        }}
+      >
+        <Button onClick={logout}>Sair</Button>
       </Header>
       <Layout>
         <Sider theme="light">

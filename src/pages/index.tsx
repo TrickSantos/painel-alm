@@ -9,6 +9,7 @@ import Membros from "./Membros";
 import PopClube from "./PopClube";
 import Presencas from "./Presencas";
 import PrivateRoute from "./PrivateRoute";
+import S from "./styles";
 
 function Pages() {
   const { usuario } = useAuth();
@@ -17,6 +18,16 @@ function Pages() {
     <Routes>
       <Route path="/login" element={<Home />} />
       <Route path="/pop" element={<PopClube />} />
+      <Route path="/telao">
+        <Route
+          path=":id"
+          element={
+            <S.Container>
+              <Presencas />
+            </S.Container>
+          }
+        />
+      </Route>
       <Route
         path="/"
         element={<PrivateRoute element={<Dashboard usuario={usuario} />} />}

@@ -115,9 +115,10 @@ export default function Presencas({}: Props) {
               // only show this custom outer label on bars that are too small
               return width < labelSkipWidth ? (
                 <text
+                  key={data.nome}
                   transform={`translate(${width + 10}, ${y + height / 2})`}
-                  text-anchor="left"
-                  dominant-baseline="central"
+                  textAnchor="left"
+                  dominantBaseline="central"
                   style={{
                     fontFamily: "sans-serif",
                     fontSize: 20,
