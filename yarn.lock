@@ -318,6 +318,18 @@
   resolved "https://registry.yarnpkg.com/@esbuild/linux-loong64/-/linux-loong64-0.14.54.tgz#de2a4be678bd4d0d1ffbb86e6de779cde5999028"
   integrity sha512-bZBrLAIX1kpWelV0XemxBZllyRmM6vgFQQG2GdNb+r3Fkp0FOh1NJSvekXDs7jq70k4euu1cryLMfU+mTXlEpw==
 
+"@fireworks-js/react@^2.5.1":
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/@fireworks-js/react/-/react-2.5.1.tgz#779dc735e0006afe70b50532e2b8951df8c23426"
+  integrity sha512-4aMCwwgOm8ivQGgN4Gona+K/0n60waH1j8WZa1Yla4zXXrWDHzd9UJSKYPffsL8SddvO5gIISWeSB9xhxspjRg==
+  dependencies:
+    fireworks-js "2.5.1"
+
+"@formkit/auto-animate@^1.0.0-beta.3":
+  version "1.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@formkit/auto-animate/-/auto-animate-1.0.0-beta.3.tgz#d5eb724ccb44afba9348df32ce0b8bb10037a7ee"
+  integrity sha512-glsi+ytwQpxT/Ctr9GtcIfVr4dO6mJ04mQbNU8MFSdCdqMopHtyfU5Fib0+9lNFIeR0luY4/0NW95/2R5pKsag==
+
 "@jridgewell/gen-mapping@^0.1.0":
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@jridgewell/gen-mapping/-/gen-mapping-0.1.1.tgz#e5d2e450306a9491e3bd77e323e38d7aff315996"
@@ -1167,6 +1179,11 @@ estree-walker@^2.0.1:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/estree-walker/-/estree-walker-2.0.2.tgz#52f010178c2a4c117a7757cfe942adb7d2da4cac"
   integrity sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==
+
+fireworks-js@2.5.1, fireworks-js@^2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/fireworks-js/-/fireworks-js-2.5.1.tgz#331d0a533aea10b4e09873ba505c29f7493d2d61"
+  integrity sha512-vl4L90PzMXelPax3tR+X8e0zJsTn5Pstb3kmbcj4gEuH4nkwtNcnpieMqS+PgpsV832awtpYQ1lTdxXHLudrqw==
 
 fs-extra@^10.0.0:
   version "10.1.0"

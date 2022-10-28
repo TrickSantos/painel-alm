@@ -8,6 +8,12 @@ const Container = styled.div`
   height: 100vh;
 `;
 
+const Evento = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+`;
+
 const LoginCard = styled(Col)`
   background-color: #fff;
   padding: 3em;
@@ -35,6 +41,7 @@ const PopImage = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 `;
 
-export default { Container, LoginForm, LoginCard, Label, PopImage };
+export default { Container, LoginForm, LoginCard, Label, PopImage, Evento };

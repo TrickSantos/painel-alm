@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
-import { ResponsiveBar } from "@nivo/bar";
+import S from "./styles";
+import aventureiros from "../assets/aventureiros.png";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useAuth } from "../hooks/useAuth";
 import useRouter from "../hooks/useRoute";
+import Logo from "../components/Logo";
+import { MINIO_URL } from "../util/constants";
 
 type Presencas = {
   id: number;
@@ -10,26 +14,26 @@ type Presencas = {
   porcentagem: number;
 };
 
-type DatumPresencas = {
-  nome: string;
-  porcentagem: number;
-};
-
 export default function Presencas() {
   const { socket } = useAuth();
   const { params } = useRouter();
-  const [presencas, setPresencas] = useState<DatumPresencas[]>([]);
+  const [parent] = useAutoAnimate<HTMLDivElement>();
+  const [presencas, setPresencas] = useState<Presencas[]>([]);
 
   useEffect(() => {
     socket.emit(
       "presenca:getPresences",
       Number(params.id),
       (res: Presencas[]) => {
-        const a = res.map((clube) => ({
-          nome: clube.nome,
-          porcentagem: clube.porcentagem,
-        }));
-        setPresencas(a.sort((a, b) => a.porcentagem - b.porcentagem));
+        const clubes = res.filter((clube) => {
+          if (clube.porcentagem === 100) {
+            return false;
+          }
+          if (clube.porcentagem > 0) {
+            return true;
+          }
+        });
+        setPresencas(clubes);
       }
     );
     socket.on("presenca:created", () => {
@@ -37,69 +41,29 @@ export default function Presencas() {
         "presenca:getPresences",
         Number(params.id),
         async (res: Presencas[]) => {
-          let clubesCompletos: Presencas[] = [];
-          const clubes = res.map((clube) => {
+          const clubes = res.filter((clube) => {
             if (clube.porcentagem === 100) {
-              clubesCompletos.push(clube);
+              return false;
             }
-
-            return {
-              nome: clube.nome,
-              porcentagem: clube.porcentagem,
-            };
+            if (clube.porcentagem > 0) {
+              return true;
+            }
           });
-          setPresencas(clubes.sort((a, b) => a.porcentagem - b.porcentagem));
+          setPresencas(clubes);
         }
       );
     });
   }, []);
 
   return (
-    <ResponsiveBar
-      data={presencas}
-      layout="horizontal"
-      indexBy="nome"
-      keys={["porcentagem"]}
-      colors={{ scheme: "spectral" }}
-      colorBy="indexValue"
-      label={(v) => `${v.data.nome}: ${v.data.porcentagem | 0}%`}
-      labelTextColor={{ from: "color", modifiers: [["darker", 1.4]] }}
-      maxValue={100}
-      minValue={0}
-      animate
-      theme={{
-        fontSize: 20,
-      }}
-      labelSkipWidth={400}
-      layers={[
-        "grid",
-        "axes",
-        "bars",
-        "markers",
-        "legends",
-        "annotations",
-        ({ bars, labelSkipWidth }) => (
-          <g>
-            {bars.map(({ width, height, y, data: { data } }) => {
-              // only show this custom outer label on bars that are too small
-              return width < labelSkipWidth ? (
-                <text
-                  key={data.nome}
-                  transform={`translate(${width + 10}, ${y + height / 2})`}
-                  textAnchor="left"
-                  dominantBaseline="central"
-                  style={{
-                    fontFamily: "sans-serif",
-                    fontSize: 20,
-                    fill: "rgb(154, 136, 84)",
-                    pointerEvents: "none",
-                  }}
-                >{`${data.nome}: ${data.porcentagem | 0}%`}</text>
-              ) : null;
-            })}
-          </g>
-        ),
-      ]}
-    />
+    <S.Evento ref={parent}>
+      {presencas.map((clube) => (
+        <Logo
+          key={clube.id}
+          logo={clube.logo ? `${MINIO_URL}${clube.logo}` : aventureiros}
+          porcentagem={clube.porcentagem}
+        />
+      ))}
+    </S.Evento>
   );
 }
