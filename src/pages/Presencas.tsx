@@ -75,7 +75,7 @@ export default function Presencas({}: Props) {
                   await sleep(2 * SECONDS);
                   socket.emit("ganhador", n);
                 });
-              } else {
+              } else if (novo.length > 0) {
                 socket.emit("ganhador", novo[0]);
               }
             }

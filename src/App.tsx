@@ -3,7 +3,7 @@ import AuthtenticationProvider from "./contexts/Authtentication";
 import Pages from "./pages";
 import dayjs from "./services/dayjs";
 
-dayjs.tz.setDefault("America/Cuiaba");
+dayjs.tz.setDefault("America/Sao_Paulo");
 
 function App() {
   return (
