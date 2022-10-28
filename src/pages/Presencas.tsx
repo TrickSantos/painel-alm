@@ -1,20 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ResponsiveBar } from "@nivo/bar";
 import { useAuth } from "../hooks/useAuth";
 import useRouter from "../hooks/useRoute";
-import { sleep } from "../util/sleep";
-import { SECONDS } from "../util/constants";
-
-type Props = {};
 
 type Presencas = {
   id: number;
   logo?: string;
   nome: string;
-  _count: {
-    presentes: number;
-    membros: number;
-  };
+  porcentagem: number;
 };
 
 type DatumPresencas = {
@@ -22,11 +15,10 @@ type DatumPresencas = {
   porcentagem: number;
 };
 
-export default function Presencas({}: Props) {
+export default function Presencas() {
   const { socket } = useAuth();
   const { params } = useRouter();
   const [presencas, setPresencas] = useState<DatumPresencas[]>([]);
-  const [completos, setCompletos] = useState<Presencas[]>([]);
 
   useEffect(() => {
     socket.emit(
@@ -35,9 +27,7 @@ export default function Presencas({}: Props) {
       (res: Presencas[]) => {
         const a = res.map((clube) => ({
           nome: clube.nome,
-          porcentagem: Math.floor(
-            (clube._count.presentes / clube._count.membros) * 100
-          ),
+          porcentagem: clube.porcentagem,
         }));
         setPresencas(a.sort((a, b) => a.porcentagem - b.porcentagem));
       }
@@ -48,38 +38,17 @@ export default function Presencas({}: Props) {
         Number(params.id),
         async (res: Presencas[]) => {
           let clubesCompletos: Presencas[] = [];
-          const a = res.map((clube) => {
-            let porcentagem = Math.floor(
-              (clube._count.presentes / clube._count.membros) * 100
-            );
-
-            if (porcentagem === 100) {
+          const clubes = res.map((clube) => {
+            if (clube.porcentagem === 100) {
               clubesCompletos.push(clube);
             }
 
             return {
               nome: clube.nome,
-              porcentagem,
+              porcentagem: clube.porcentagem,
             };
           });
-          setPresencas(a.sort((a, b) => a.porcentagem - b.porcentagem));
-
-          if (clubesCompletos.length > 0) {
-            if (completos.toString() !== clubesCompletos.toString()) {
-              const novo = clubesCompletos.filter(
-                (c) => !completos.includes(c)
-              );
-              setCompletos(clubesCompletos);
-              if (novo.length > 1) {
-                novo.forEach(async (n) => {
-                  await sleep(2 * SECONDS);
-                  socket.emit("ganhador", n);
-                });
-              } else if (novo.length > 0) {
-                socket.emit("ganhador", novo[0]);
-              }
-            }
-          }
+          setPresencas(clubes.sort((a, b) => a.porcentagem - b.porcentagem));
         }
       );
     });

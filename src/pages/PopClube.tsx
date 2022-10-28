@@ -39,6 +39,7 @@ function PopClube() {
                       objectFit: "contain",
                       height: "auto",
                       width: "90%",
+                      marginTop: 20,
                     }}
                     src={`${MINIO_URL}${ganhador?.logo}`}
                   />
