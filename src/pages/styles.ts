@@ -12,6 +12,9 @@ const Evento = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  background-color: #f3f3fc;
 `;
 
 const LoginCard = styled(Col)`
