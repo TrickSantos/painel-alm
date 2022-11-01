@@ -9,7 +9,7 @@ import { animated, useTransition } from "react-spring";
 import Fireworks from "@fireworks-js/react";
 import { Typography } from "antd";
 
-type Presencas = {
+export type IPresencas = {
   id: number;
   logo?: string;
   nome: string;
@@ -37,7 +37,8 @@ const Image = ({ bars }: any) => {
           style={{
             fontFamily: "sans-serif",
             fontSize: 20,
-            fill: "rgb(154, 136, 84)",
+            fill: "#000000",
+            fontWeight: "bolder",
             pointerEvents: "none",
           }}
         >{`${data.porcentagem | 0}%`}</text>
@@ -58,13 +59,13 @@ export default function Presencas() {
     enter: { x: 0, y: 0, opacity: 1 },
     leave: { x: 100, y: 800, opacity: 0 },
   });
-  const [presencas, setPresencas] = useState<Presencas[]>([]);
+  const [presencas, setPresencas] = useState<IPresencas[]>([]);
 
   useEffect(() => {
     socket.emit(
       "presenca:getPresences",
       Number(params.id),
-      (res: Presencas[]) => {
+      (res: IPresencas[]) => {
         const clubes = res.filter((clube) => {
           if (clube.porcentagem === 100) {
             return false;
@@ -80,7 +81,7 @@ export default function Presencas() {
       socket.emit(
         "presenca:getPresences",
         Number(params.id),
-        async (res: Presencas[]) => {
+        async (res: IPresencas[]) => {
           const clubes = res.filter((clube) => {
             if (clube.porcentagem === 100) {
               return false;
@@ -101,7 +102,7 @@ export default function Presencas() {
   }, []);
 
   return (
-    <>
+    <S.ContainerGrafico>
       {isVisible ? (
         <S.Container>
           <S.PopImage>
@@ -189,7 +190,7 @@ export default function Presencas() {
           ]}
         />
       )}
-    </>
+    </S.ContainerGrafico>
   );
 }
 

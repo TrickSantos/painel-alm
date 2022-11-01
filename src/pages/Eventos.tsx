@@ -3,7 +3,9 @@ import {
   EditOutlined,
   FundTwoTone,
   GlobalOutlined,
+  LoadingOutlined,
   PlusOutlined,
+  PrinterOutlined,
 } from "@ant-design/icons";
 import { Button, Col, PageHeader, Space, Table, Tooltip } from "antd";
 import { useEffect, useState } from "react";
@@ -12,6 +14,10 @@ import { Link } from "react-router-dom";
 import Evento from "../components/Drawer/Evento";
 import { useAuth } from "../hooks/useAuth";
 import dayjs from "../services/dayjs";
+import { pdf, PDFDownloadLink } from "@react-pdf/renderer";
+import Relatorio from "../components/Relatorio";
+import { saveAs } from "file-saver";
+import { IPresencas } from "./Presencas";
 
 function Eventos() {
   const { socket, usuario } = useAuth();
@@ -19,6 +25,26 @@ function Eventos() {
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const generatePdfDocument = async (
+    Component: any,
+    filename: string,
+    evento: Evento
+  ) => {
+    setLoading(true);
+    socket.emit(
+      "presenca:getPresences",
+      evento.id,
+      async (res: IPresencas[]) => {
+        const blob = await pdf(
+          <Component dados={res} evento={evento} />
+        ).toBlob();
+
+        setLoading(false);
+        saveAs(blob, filename);
+      }
+    );
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -120,6 +146,15 @@ function Eventos() {
                 <Link to="/pop" target="_blank" rel="noreferrer">
                   <Button icon={<GlobalOutlined />} type="text" />
                 </Link>
+              </Tooltip>
+              <Tooltip title="Relatorio">
+                <Button
+                  icon={<PrinterOutlined />}
+                  type="text"
+                  onClick={() =>
+                    generatePdfDocument(Relatorio, "relatorio.pdf", evento)
+                  }
+                />
               </Tooltip>
               {usuario?.funcao === "administrador" && (
                 <Button

@@ -1,11 +1,21 @@
 import { Col } from "antd";
 import styled from "styled-components";
+import bg from "../assets/bg.png";
 
 const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
+`;
+
+const ContainerGrafico = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  background-image: url(${bg});
 `;
 
 const Evento = styled.div`
@@ -47,4 +57,12 @@ const PopImage = styled.div`
   justify-content: center;
 `;
 
-export default { Container, LoginForm, LoginCard, Label, PopImage, Evento };
+export default {
+  Container,
+  LoginForm,
+  LoginCard,
+  Label,
+  PopImage,
+  Evento,
+  ContainerGrafico,
+};
